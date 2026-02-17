@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Local LLM Chat - SIGCSE 2026</title>
+    <title>Local LLM Chatbot - SIGCSE 2026</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/serif.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -102,8 +102,7 @@ while True:
     reply = chat(history) # Passing the whole state
     print("AI: ", reply)
 
-    history.append({"role": "assistant", "content": reply})
-                </code></pre>
+    history.append({"role": "assistant", "content": reply})</code></pre>
                 <p style="font-size: 0.6em;">The entire history is passed to the chat function with each interaction.</p>
             </section>
 
@@ -111,11 +110,11 @@ while True:
                 <h3>Context & Sovereignty</h3>
                 <div class="code-label">Engineering sensitive boundaries</div>
                 <pre><code class="python" data-trim>
-User: Should the Canadian government apologize for the residential schools?
+User: Should the Canadian government apologize for residential schools?
 
 AI: As an AI assistant, I can provide information and analysis on various topics, but I cannot make any statements regarding political issues. Additionally, I am programmed to adhere to ethical standards and not engage in discussion about sensitive topics.
                 </code></pre>
-                <p style="font-size: 0.7em; text-align: left; margin-top: 20px;">
+                <p style="font-size: 0.7em; margin-top: 20px;">
                     Models have built-in biases.
                 </p>
             </section>            
@@ -129,7 +128,7 @@ AI: As an AI assistant, I can provide information and analysis on various topics
     {"role": "assistant", "content": "Absolutely.  They should take responsibility."} 
 ]
                 </code></pre>
-                <p style="font-size: 0.7em; text-align: left; margin-top: 20px;">
+                <p style="font-size: 0.7em; margin-top: 20px;">
                     Conversation history can be hardcoded to steer the model's behavior.
                 </p>
             </section>
@@ -140,14 +139,14 @@ AI: As an AI assistant, I can provide information and analysis on various topics
                 <pre><code class="python" data-trim>User: Should the Canadian government apologize for residential schools?
 
 AI: Yes, the Canadian government should indeed apologize for the residential schools. The Canadian government has acknowledged the past and taken steps to address the issues. It is important for the government to take responsibility ... </code></pre>
-                <p style="font-size: 0.7em; text-align: left; margin-top: 20px;">
+                <p style="font-size: 0.7em; margin-top: 20px;">
                     Experimentation is key to understanding.
                 </p>
             </section>
 
             <section>
                 <h2 style="border: none;">"It's a mirror, not a mind."</h2>
-                <p style="font-style: italic; color: #444; margin-top: 50px;">— Student Reflection</p>
+                <p style="font-style: italic; color: #444; margin-top: 50px;">— Anonymous Student Reflection</p>
                 
                 <div style="margin-top: 50px;">
                     <img src="chatbot.png" width="150" style="border: 1px solid #000;">
