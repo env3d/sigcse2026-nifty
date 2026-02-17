@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Local LLM Chat - SIGCSE 2026</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/serif.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .reveal h1, .reveal h2, .reveal h3 { color: #000; text-transform: uppercase; font-weight: 800; border-bottom: 3px solid #000; padding-bottom: 10px; }
+        .reveal pre { box-shadow: none; border: 1px solid #222; width: 100%; font-size: 0.8em; white-space: pre-wrap; word-wrap: break-word; }
+        .highlight-box { background: #f0f0f0; border-left: 10px solid #000; padding: 20px; text-align: left; }
+        .code-label { font-family: monospace; font-size: 0.5em; color: #666; text-align: left; margin-bottom: 5px; }
+        .battery-icon { font-size: 4em; color: #cc0000; margin-bottom: 20px; }
+        .title-sub { font-size: 0.6em; margin-top: 40px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h1 style="border: none;">Local LLM Chatbot</h1>
+                <p style="font-weight: bold; letter-spacing: 2px;">Nifty Assignments 2026</p>
+                <div class="title-sub">
+                    <p><strong>Jason Madar</strong></p>
+                    <p>Langara College / Capilano University</p>
+                    <p style="opacity: 0.7;">SIGCSE TS // St. Louis, MO</p>
+                </div>
+            </section>
+
+            <section>
+                <div class="battery-icon">
+                    <i class="fa-solid fa-battery-quarter"></i>
+                </div>
+                <h2>The Week 12 Grind</h2>
+            </section>
+
+            <section>
+                <h3>Pedagogical Anchor</h3>
+                <p style="font-size: 0.8em;">Is this "AI Magic" or just Chapter 8?</p>
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 1;">
+                        <div class="code-label">Traditional Sentinel Loop</div>
+                        <pre><code class="python" data-trim>
+while True:
+    val = input("Num: ")
+    if val == "quit":
+        break
+    total += int(val)
+    print("Sum: ", total)
+                        </code></pre>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="code-label">Chatbot Loop</div>
+                        <pre><code class="python" data-trim>
+while True:
+    val = input("You: ")
+    if val == "quit":
+        break
+    response = chat(val)
+    print("AI: ", response)
+                        </code></pre>
+                    </div>
+                </div>
+                <p style="font-size: 0.6em; color: #666;">Ref: Runestone ThinkCSPY Chapter 8</p>
+            </section>
+
+            <section>
+                <h3>The <code>chat()</code> Unlock</h3>
+                <div class="highlight-box">
+                    <pre><code class="python">from chat import chat</code></pre>
+                </div>
+                <ul style="font-size: 0.8em; margin-top: 30px;">
+                    <li><strong>Sovereign:</strong> Runs locally in the student's Codespace.</li>
+                    <li><strong>Privacy:</strong> No API keys. No data harvesting. No cost.</li>
+                    <li><strong>Standard:</strong> It feels like a Python primitive.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>The Teachable Moment</h3>
+                <p>The "Broken" Demo: Why does it forget?</p>
+                <div class="highlight-box" style="font-family: monospace; font-size: 0.7em;">
+                    User: My name is Jason.<br>
+                    AI: Nice to meet you, Jason!<br>
+                    User: What is my name?<br>
+                    AI: I'm sorry, I don't know your name.
+                </div>
+                <p style="font-size: 0.7em; margin-top: 20px;"><strong>Lesson:</strong> The model is stateless. <u>Memory</u> is a data structure problem.</p>
+            </section>
+
+            <section>
+                <h3>The Accumulator Pattern</h3>
+                <p style="font-size: 0.7em;">Context is just a <code>list</code> of <code>dict</code></p>
+                <pre><code class="python" data-trim style="font-size: 0.7em;">history = [] # The Accumulator
+
+while True:
+    u_in = input("You: ")
+    history.append({"role": "user", "content": u_in})
+    
+    reply = chat(history) # Passing the whole state
+    print("AI: ", reply)
+
+    history.append({"role": "assistant", "content": reply})
+                </code></pre>
+                <p style="font-size: 0.6em;">The entire history is passed to the chat function with each interaction.</p>
+            </section>
+
+            <section>
+                <h3>Context & Sovereignty</h3>
+                <div class="code-label">Engineering sensitive boundaries</div>
+                <pre><code class="python" data-trim>
+User: Should the Canadian government apologize for the residential schools?
+
+AI: As an AI assistant, I can provide information and analysis on various topics, but I cannot make any statements regarding political issues. Additionally, I am programmed to adhere to ethical standards and not engage in discussion about sensitive topics.
+                </code></pre>
+                <p style="font-size: 0.7em; text-align: left; margin-top: 20px;">
+                    Models have built-in biases.
+                </p>
+            </section>            
+
+            <section>
+                <h3>Context & Sovereignty</h3>
+                <div class="code-label">Engineering sensitive boundaries</div>
+                <pre><code class="python" data-trim>history = [
+    {"role": "user", "content": "The government has apologized and acknowledged the damanged done again and again by residential schools in Canada."},
+
+    {"role": "assistant", "content": "Absolutely.  They should take responsibility."} 
+]
+                </code></pre>
+                <p style="font-size: 0.7em; text-align: left; margin-top: 20px;">
+                    Conversation history can be hardcoded to steer the model's behavior.
+                </p>
+            </section>
+
+            <section>
+                <h3>Context & Sovereignty</h3>
+                <div class="code-label">Engineering sensitive boundaries</div>
+                <pre><code class="python" data-trim>User: Should the Canadian government apologize for residential schools?
+
+AI: Yes, the Canadian government should indeed apologize for the residential schools. The Canadian government has acknowledged the past and taken steps to address the issues. It is important for the government to take responsibility ... </code></pre>
+                <p style="font-size: 0.7em; text-align: left; margin-top: 20px;">
+                    Experimentation is key to understanding.
+                </p>
+            </section>
+
+            <section>
+                <h2 style="border: none;">"It's a mirror, not a mind."</h2>
+                <p style="font-style: italic; color: #444; margin-top: 50px;">— Student Reflection</p>
+                
+                <div style="margin-top: 50px;">
+                    <img src="chatbot.png" width="150" style="border: 1px solid #000;">
+                    <p style="font-family: monospace; font-size: 0.4em;">github.com/env3d/cs1-llm-local-chatbot</p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            center: true,
+            transition: 'fade',
+            width: 1200,
+            height: 700
+        });
+    </script>
+</body>
+</html>
