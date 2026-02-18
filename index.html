@@ -177,13 +177,47 @@ AI: Yes, the Canadian government should indeed apologize for the residential sch
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = 'en-US';
+    let lastProcessedIndex = -1;
 
     recognition.onresult = (event) => {
         let interimTranscript = '';
+        let finalTranscript = '';
+        
         for (let i = event.resultIndex; i < event.results.length; ++i) {
-        interimTranscript += event.results[i][0].transcript;
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript;
+            } else {
+                interimTranscript += transcript;
+            }
         }
-        document.getElementById('caption-box').innerHTML = interimTranscript;
+        
+        document.getElementById('caption-box').innerHTML = finalTranscript || interimTranscript;
+
+        // Uncomment the following block to enable voice commands for navigation. 
+        // Note: This is a very basic implementation and may require refinement for real-world use.
+        //
+        // if (finalTranscript) {
+        //     const command = finalTranscript.toLowerCase();
+        //     if (command.includes("next slide") || command.includes("move on")) {
+        //         Reveal.next();
+        //         // Visual feedback that command was heard
+        //         document.getElementById('caption-box').style.color = "#00FF00"; 
+        //         setTimeout(() => { 
+        //             document.getElementById('caption-box').style.color = "white"; 
+        //             document.getElementById('caption-box').innerHTML = "&nbsp;"; // Clear caption after command 
+        //         }, 1000);
+                
+        //     } 
+        //     else if (command.includes("go back")) {
+        //         Reveal.prev();
+        //         document.getElementById('caption-box').style.color = "#00FF00"; 
+        //         setTimeout(() => { 
+        //             document.getElementById('caption-box').style.color = "white"; 
+        //             document.getElementById('caption-box').innerHTML = "&nbsp;"; // Clear caption after command 
+        //         }, 1000);
+        //     }
+        // }
     };
 
     recognition.start(); // This will trigger the "Allow Mic" popup in Chrome
