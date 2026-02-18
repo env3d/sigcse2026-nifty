@@ -13,7 +13,7 @@
         .code-label { font-family: monospace; font-size: 0.5em; color: #666; text-align: left; margin-bottom: 5px; }
         .battery-icon { font-size: 4em; color: #cc0000; margin-bottom: 20px; }
         .title-sub { font-size: 0.6em; margin-top: 40px; line-height: 1.5; }
-    </style>
+    </style>    
 </head>
 <body>
     <div class="reveal">
@@ -167,5 +167,26 @@ AI: Yes, the Canadian government should indeed apologize for the residential sch
             height: 700
         });
     </script>
+
+    <div id="caption-box" style="position:fixed; bottom:20px; left:0; width:100%; text-align:center; color:white; background:rgba(0,0,0,0.7); font-size:24px; z-index:9999; padding:10px; pointer-events:none;">
+    Captions will appear here...
+    </div>
+
+    <script>
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (event) => {
+        let interimTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+        interimTranscript += event.results[i][0].transcript;
+        }
+        document.getElementById('caption-box').innerHTML = interimTranscript;
+    };
+
+    recognition.start(); // This will trigger the "Allow Mic" popup in Chrome
+    </script>    
 </body>
 </html>
