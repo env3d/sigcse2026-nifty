@@ -13,6 +13,9 @@
         .code-label { font-family: monospace; font-size: 0.5em; color: #666; text-align: left; margin-bottom: 5px; }
         .battery-icon { font-size: 4em; color: #cc0000; margin-bottom: 20px; }
         .title-sub { font-size: 0.6em; margin-top: 40px; line-height: 1.5; }
+        @media print {
+            #caption-box { display: none !important; }
+        }
     </style>    
 </head>
 <body>
@@ -72,23 +75,48 @@ while True:
                     <pre><code class="python">from chat import chat</code></pre>
                 </div>
                 <ul style="font-size: 0.8em; margin-top: 30px;">
-                    <li><strong>Sovereign:</strong> Runs locally in the student's Codespace.</li>
+                    <li><strong>Sovereign:</strong> Runs locally in the Github Codespaces.</li>
                     <li><strong>Privacy:</strong> No API keys. No data harvesting. No cost.</li>
                     <li><strong>Standard:</strong> It feels like a Python primitive.</li>
+                    <li><strong>Fast:</strong> Boots in ~90 seconds; generates 5–10 tokens per second.</li>
                 </ul>
             </section>
 
-            <section>
-                <h3>The Teachable Moment</h3>
-                <p>The "Broken" Demo: Why does it forget?</p>
-                <div class="highlight-box" style="font-family: monospace; font-size: 0.7em;">
-                    User: My name is Jason.<br>
-                    AI: Nice to meet you, Jason!<br>
-                    User: What is my name?<br>
-                    AI: I'm sorry, I don't know your name.
-                </div>
-                <p style="font-size: 0.7em; margin-top: 20px;"><strong>Lesson:</strong> The model is stateless. <u>Memory</u> is a data structure problem.</p>
-            </section>
+<section>
+    <h3>The Teachable Moment</h3>
+    <p>The "Broken" Demo: Why does it forget?</p>
+
+    <div style="display: flex; gap: 20px; margin-top: 20px;">
+        <!-- left column: the chatbot loop -->
+        <div style="flex: 1;">
+            <div class="code-label">Chatbot loop</div>
+            <pre><code class="python" data-trim style="font-size: 0.7em;">
+while True:
+    val = input("You: ")
+    if val == "quit":
+        break
+    response = chat(val)
+    print("AI: ", response)
+            </code></pre>
+        </div>
+
+        <!-- right column: the “broken” interaction -->
+        <div style="flex: 1;">
+            <div class="code-label">“Broken” interaction</div>
+            <div class="highlight-box" style="font-family: monospace; font-size: 0.7em;">
+                User: My name is Jason.<br>
+                AI: Nice to meet you, Jason!<br>
+                User: What is my name?<br>
+                AI: I'm sorry, I don't know your name.
+            </div>
+        </div>
+    </div>
+
+    <p style="font-size: 0.7em; margin-top: 20px;">
+        <strong>Lesson:</strong> The model is stateless. <u>Memory</u> is a data
+        structure problem.
+    </p>
+</section>
 
             <section>
                 <h3>The Accumulator Pattern</h3>
