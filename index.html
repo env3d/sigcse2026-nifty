@@ -75,7 +75,8 @@ while True:
                     <pre><code class="python">from chat import chat</code></pre>
                 </div>
                 <ul style="font-size: 0.8em; margin-top: 30px;">
-                    <li><strong>Sovereign:</strong> Runs locally in the Github Codespaces.</li>
+                    <li><strong>Sovereign:</strong> Runs locally in the <i>Github Codespaces</i> 
+                        preconfigured with <i>llama.cpp</i> and <i>Qwen 2.5-0.5B model​</i></li>
                     <li><strong>Privacy:</strong> No API keys. No data harvesting. No cost.</li>
                     <li><strong>Standard:</strong> It feels like a Python primitive.</li>
                     <li><strong>Fast:</strong> Boots in ~90 seconds; generates 5–10 tokens per second.</li>
@@ -201,54 +202,61 @@ AI: Yes, the Canadian government should indeed apologize for the residential sch
     </div>
 
     <script>
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
-    let lastProcessedIndex = -1;
+    const captionBox = document.getElementById('caption-box');
 
-    recognition.onresult = (event) => {
-        let interimTranscript = '';
-        let finalTranscript = '';
-        
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-            const transcript = event.results[i][0].transcript;
-            if (event.results[i].isFinal) {
-                finalTranscript += transcript;
-            } else {
-                interimTranscript += transcript;
+    // feature detect speech recognition API; hide the box if not supported
+    if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+        captionBox.style.display = 'none';
+    } else {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+        let lastProcessedIndex = -1;
+
+        recognition.onresult = (event) => {
+            let interimTranscript = '';
+            let finalTranscript = '';
+            
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript;
+                } else {
+                    interimTranscript += transcript;
+                }
             }
-        }
-        
-        document.getElementById('caption-box').innerHTML = finalTranscript || interimTranscript;
+            
+            captionBox.innerHTML = finalTranscript || interimTranscript;
 
-        // Uncomment the following block to enable voice commands for navigation. 
-        // Note: This is a very basic implementation and may require refinement for real-world use.
-        //
-        // if (finalTranscript) {
-        //     const command = finalTranscript.toLowerCase();
-        //     if (command.includes("next slide") || command.includes("move on")) {
-        //         Reveal.next();
-        //         // Visual feedback that command was heard
-        //         document.getElementById('caption-box').style.color = "#00FF00"; 
-        //         setTimeout(() => { 
-        //             document.getElementById('caption-box').style.color = "white"; 
-        //             document.getElementById('caption-box').innerHTML = "&nbsp;"; // Clear caption after command 
-        //         }, 1000);
-                
-        //     } 
-        //     else if (command.includes("go back")) {
-        //         Reveal.prev();
-        //         document.getElementById('caption-box').style.color = "#00FF00"; 
-        //         setTimeout(() => { 
-        //             document.getElementById('caption-box').style.color = "white"; 
-        //             document.getElementById('caption-box').innerHTML = "&nbsp;"; // Clear caption after command 
-        //         }, 1000);
-        //     }
-        // }
-    };
+            // Uncomment the following block to enable voice commands for navigation. 
+            // Note: This is a very basic implementation and may require refinement for real-world use.
+            //
+            // if (finalTranscript) {
+            //     const command = finalTranscript.toLowerCase();
+            //     if (command.includes("next slide") || command.includes("move on")) {
+            //         Reveal.next();
+            //         // Visual feedback that command was heard
+            //         captionBox.style.color = "#00FF00"; 
+            //         setTimeout(() => { 
+            //             captionBox.style.color = "white"; 
+            //             captionBox.innerHTML = "&nbsp;"; // Clear caption after command 
+            //         }, 1000);
+                    
+            //     } 
+            //     else if (command.includes("go back")) {
+            //         Reveal.prev();
+            //         captionBox.style.color = "#00FF00"; 
+            //         setTimeout(() => { 
+            //             captionBox.style.color = "white"; 
+            //             captionBox.innerHTML = "&nbsp;"; // Clear caption after command 
+            //         }, 1000);
+            //     }
+            // }
+        };
 
-    recognition.start(); // This will trigger the "Allow Mic" popup in Chrome
+        recognition.start(); // This will trigger the "Allow Mic" popup in Chrome
+    }
     </script>    
 </body>
 </html>
